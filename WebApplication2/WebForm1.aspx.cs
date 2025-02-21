@@ -15,7 +15,12 @@ namespace WebApplication2
 		SqlConnection conn = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["con_student_db"].ConnectionString);
 		protected void Page_Load(object sender, EventArgs e)
 		{
-            FillGridStudents();
+            if(!Page.IsPostBack)
+            {
+                //Response.Write("First Load!\n");
+                FillGridStudents();
+            }
+            
 		}
 
         private void FillGridStudents()
@@ -53,7 +58,7 @@ namespace WebApplication2
                 string Enr = ((TextBox) GridView1.FooterRow.FindControl("EnoInsertItemTextBox")).Text;
                 string Name = ((TextBox) GridView1.FooterRow.FindControl("NameInsertItemTextBox")).Text;
                 
-                SqlCommand cmd = new SqlCommand("\ninsert into Student (Eno, Name) values (" + Enr + ", " + Name + ")", conn);
+                SqlCommand cmd = new SqlCommand("INSERT INTO Student (Eno, \"Name\") values ('" + Enr + "', '" + Name + "')", conn);
                 Response.Write(cmd.CommandText);
                 cmd.ExecuteNonQuery();
             } catch (Exception err) {
@@ -64,6 +69,7 @@ namespace WebApplication2
                     conn.Close();
                 }
             }
+            FillGridStudents();
         }
 
         protected void GridView1_RowDeleting(object sender, GridViewDeleteEventArgs e)
@@ -98,6 +104,55 @@ namespace WebApplication2
             string id = ((Label)row.Cells[0].FindControl("IdLabel")).Text;
 
             Response.Write("ID: " + id);
+        }
+
+        protected void GridView1_RowEditing(object sender, GridViewEditEventArgs e)
+        {
+            GridView1.EditIndex = e.NewEditIndex;
+            FillGridStudents();
+        }
+
+        protected void GridView1_RowCancelingEdit(object sender, GridViewCancelEditEventArgs e)
+        {
+            GridView1.EditIndex = - 1;
+            FillGridStudents();
+        }
+
+        protected void GridView1_RowUpdating(object sender, GridViewUpdateEventArgs e)
+        {
+            GridViewRow row = GridView1.Rows[e.RowIndex];
+            string id = ((Label)row.Cells[0].FindControl("IdEditItemLabel")).Text;
+            string eno = ((TextBox)row.Cells[1].FindControl("EnoEditItemTextBox")).Text;
+            string name= ((TextBox)row.Cells[2].FindControl("NameEditItemTextBox")).Text;
+
+            string q="";
+
+            try {
+                conn.Open();
+
+                q = "update student set Eno='" + eno + "', Name='" + name + "' where Id='" + id + "'";
+                SqlCommand cmd = new SqlCommand(q, conn);
+                cmd.ExecuteNonQuery();
+            } catch (Exception err)
+            {
+                Response.Write(q + "\n" + err.ToString());
+            }
+            finally {
+                if(conn.State==ConnectionState.Open)
+                {
+                    conn.Close();
+                }
+            }
+
+            GridView1.EditIndex = -1;
+            FillGridStudents();
+
+            //Response.Write(name);
+        }
+
+        protected void GridView1_Sorting(object sender, GridViewSortEventArgs e)
+        {
+
         }
     }
 }

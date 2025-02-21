@@ -10,7 +10,7 @@
     <form id="form1" runat="server">
         <div>
             Hello World!
-            <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="False" CellPadding="4" ForeColor="#333333" GridLines="None" ShowFooter="True" OnRowDeleting="GridView1_RowDeleting" OnSelectedIndexChanging="GridView1_SelectedIndexChanging">
+            <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="False" CellPadding="4" ForeColor="#333333" GridLines="None" ShowFooter="True" OnRowDeleting="GridView1_RowDeleting" OnSelectedIndexChanging="GridView1_SelectedIndexChanging" OnRowEditing="GridView1_RowEditing" OnRowCancelingEdit="GridView1_RowCancelingEdit" OnRowUpdating="GridView1_RowUpdating" AllowSorting="true" OnSorting="GridView1_Sorting">
                 <AlternatingRowStyle BackColor="White" />
                 <Columns>
                     <asp:TemplateField>
@@ -33,7 +33,7 @@
                             <asp:LinkButton ID="InsertLinkButton" runat="server" CommandArgument='' CommandName="Insert" OnClick="InsertLinkButton_Click">Insert</asp:LinkButton>
                         </FooterTemplate>
                     </asp:TemplateField>
-                    <asp:TemplateField HeaderText="ID">
+                    <asp:TemplateField HeaderText="ID" SortExpression="Id">
                         <HeaderTemplate>ID</HeaderTemplate>
                         <ItemTemplate>
                             <asp:Label ID="IdLabel" runat="server" Text='<%# Eval("ID") %>'></asp:Label>
@@ -43,7 +43,7 @@
                         </EditItemTemplate>
                         <FooterTemplate></FooterTemplate>
                     </asp:TemplateField>
-                    <asp:TemplateField HeaderText="Enr No.">
+                    <asp:TemplateField HeaderText="Enr No." SortExpression="Eno">
                         <HeaderTemplate>Enr No</HeaderTemplate>
                         <ItemTemplate>
                             <asp:Label ID="EnoLabel" runat="server" Text='<%# Eval("Eno") %>'></asp:Label>
@@ -55,7 +55,7 @@
                             <asp:TextBox ID="EnoInsertItemTextBox" runat="server"></asp:TextBox>
                         </FooterTemplate>
                     </asp:TemplateField>
-                    <asp:TemplateField HeaderText="Name">
+                    <asp:TemplateField HeaderText="Name" SortExpression="Name">
                         <HeaderTemplate>Name</HeaderTemplate>
                         <ItemTemplate>
                             <asp:Label ID="NameLabel" runat="server" Text='<%# Eval("Name") %>'></asp:Label>
